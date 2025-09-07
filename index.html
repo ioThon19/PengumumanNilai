@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengumuman Nilai Ulangan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+            position: relative;
+            background-size: 200% 200%;
+            animation: gradient-animation 15s ease infinite;
+        }
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .gradient-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.2) 0%, transparent 50%);
+            z-index: 1;
+        }
+        
+        .elegant-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            background-image: 
+                linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%),
+                linear-gradient(-45deg, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%);
+            background-size: 60px 60px;
+            z-index: 1;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+        }
+        
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+        }
+        
+        .result-enter {
+            animation: slideInScale 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .result-enter .animate-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn-up 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes fadeIn-up {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-enter .delay-1 { animation-delay: 0.2s; }
+        .result-enter .delay-2 { animation-delay: 0.4s; }
+        .result-enter .delay-3 { animation-delay: 0.6s; }
+        .result-enter .delay-4 { animation-delay: 0.8s; }
+        .result-enter .delay-5 { animation-delay: 1.0s; }
+        
+        @keyframes slideInScale {
+            0% {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .score-badge {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .score-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .score-badge:hover::before {
+            left: 100%;
+        }
+        
+        .sparkle {
+            position: relative;
+        }
+        
+        .sparkle::after {
+            content: '✨';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            animation: sparkleRotate 2s linear infinite;
+        }
+        
+        @keyframes sparkleRotate {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        
+        .typing-animation {
+            border-right: 2px solid #667eea;
+            animation: typing 2s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #667eea; }
+        }
+        
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 4px;
+            border-radius: 2px;
+            transition: width 1s ease-in-out;
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen relative">
+    <!-- Elegant Pattern -->
+    <div class="elegant-pattern"></div>
+
+    <div class="container mx-auto px-4 py-8 relative z-10">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <div class="sparkle inline-block">
+                <h1 class="text-5xl md:text-7xl font-bold text-white mb-6">
+                    Pengumuman Nilai
+                </h1>
+            </div>
+            <div class="bg-white/20 backdrop-blur-sm rounded-full px-8 py-4 inline-block">
+                <p class="text-xl text-white font-medium">
+                    ✨ Masukkan NIS untuk melihat hasil ulangan Anda ✨
+                </p>
+            </div>
+        </div>
+
+        <!-- Search Card -->
+        <div id="searchCard" class="max-w-md mx-auto mb-8">
+            <div class="glass-card rounded-3xl p-8 hover-lift">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4 pulse-animation">
+                        <span class="text-2xl">🔍</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800">Cari Nilai Anda</h3>
+                </div>
+                
+                <div class="mb-6">
+                    <label for="nisInput" class="block text-sm font-semibold text-gray-700 mb-3">
+                        📝 Nomor Induk Siswa (NIS)
+                    </label>
+                    <input 
+                        type="text" 
+                        id="nisInput" 
+                        placeholder="Masukkan NIS Anda..."
+                        class="w-full px-6 py-4 border-2 border-purple-200 rounded-2xl focus:ring-4 focus:ring-purple-300 focus:border-purple-500 transition-all duration-300 text-lg font-medium neon-glow"
+                    >
+                </div>
+                
+                <button 
+                    onclick="searchResult()" 
+                    class="w-full bg-gradient-to-r from-purple-600 via-blue-600 to-purple-600 text-white py-4 px-8 rounded-2xl font-bold text-lg hover:from-purple-700 hover:via-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-2xl relative overflow-hidden group"
+                >
+                    <span class="relative z-10">🚀 Cari Nilai Sekarang</span>
+                    <div class="absolute inset-0 bg-gradient-to-r from-pink-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="text-center hidden my-16">
+            <div class="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-white/80"></div>
+            <p class="text-white text-lg mt-4 font-semibold tracking-wider">Mencari data siswa...</p>
+        </div>
+
+        <!-- Result Card -->
+        <div id="resultCard" class="max-w-2xl mx-auto hidden">
+            <div class="glass-card rounded-3xl p-8 result-enter hover-lift">
+                <!-- Header Result -->
+                <div class="text-center mb-8 animate-in">
+                    <div id="statusIcon" class="text-8xl mb-4 pulse-animation"></div>
+                    <h2 class="text-3xl font-bold mb-4">🎯 Hasil Ulangan Anda</h2>
+                    <div class="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full"></div>
+                </div>
+                
+                <!-- Student Info -->
+                <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6 mb-6 animate-in delay-1">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
+                                <span class="text-white font-bold">📋</span>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600 font-medium">NIS</p>
+                                <p id="resultNIS" class="font-bold text-gray-800 text-lg"></p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                                <span class="text-white font-bold">👤</span>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600 font-medium">Nama</p>
+                                <p id="resultName" class="font-bold text-gray-800 text-lg"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Score Display -->
+                <div class="text-center mb-8 animate-in delay-2">
+                    <div class="relative inline-block">
+                        <div class="w-32 h-32 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center mx-auto mb-4 score-badge">
+                            <span id="resultScore" class="text-4xl font-bold text-white">0</span>
+                        </div>
+                        <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
+                            <span id="resultStatus" class="px-6 py-2 rounded-full font-bold text-sm shadow-lg"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="mb-8 animate-in delay-3">
+                    <div class="flex justify-between text-sm text-gray-600 mb-2">
+                        <span>Progress Nilai</span>
+                        <span id="progressText">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                        <div id="progressBar" class="progress-bar rounded-full h-3" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Detail Skor -->
+                <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6 animate-in delay-4">
+                    <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                        <span class="mr-3">📊</span>
+                        Detail Breakdown Skor
+                    </h3>
+                    
+                    <!-- Skor Pilihan Ganda -->
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between bg-white rounded-xl p-4 shadow-sm">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
+                                    <span class="text-white font-bold">📝</span>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-800">Pilihan Ganda</p>
+                                    <p class="text-sm text-gray-600">Multiple Choice</p>
+                                </div>
+                            </div>
+                            <span id="resultPG" class="text-2xl font-bold text-blue-600"></span>
+                        </div>
+                    </div>
+
+                    <!-- Skor Essay -->
+                    <div>
+                        <div class="flex items-center justify-between bg-white rounded-xl p-4 shadow-sm">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center">
+                                    <span class="text-white font-bold">✍️</span>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-800">Soal Essay</p>
+                                    <p class="text-sm text-gray-600">Essay Questions</p>
+                                </div>
+                            </div>
+                            <span id="resultPG" class="text-2xl font-bold text-blue-600"></span>
+                        </div>
+                        
+                        <div class="grid grid-cols-5 gap-3 mt-4 mb-4">
+                            <div class="text-center">
+                                <div class="text-xs text-gray-500 mb-2 font-medium">Soal 1</div>
+                                <div id="essay1" class="bg-white rounded-xl py-3 px-2 text-lg font-bold shadow-sm hover-lift"></div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-xs text-gray-500 mb-2 font-medium">Soal 2</div>
+                                <div id="essay2" class="bg-white rounded-xl py-3 px-2 text-lg font-bold shadow-sm hover-lift"></div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-xs text-gray-500 mb-2 font-medium">Soal 3</div>
+                                <div id="essay3" class="bg-white rounded-xl py-3 px-2 text-lg font-bold shadow-sm hover-lift"></div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-xs text-gray-500 mb-2 font-medium">Soal 4</div>
+                                <div id="essay4" class="bg-white rounded-xl py-3 px-2 text-lg font-bold shadow-sm hover-lift"></div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-xs text-gray-500 mb-2 font-medium">Soal 5</div>
+                                <div id="essay5" class="bg-white rounded-xl py-3 px-2 text-lg font-bold shadow-sm hover-lift"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl p-4 text-center shadow-sm">
+                            <span class="text-gray-600 font-medium">Total Essay: </span>
+                            <span id="totalEssay" class="text-2xl font-bold text-purple-600">0</span>
+                            <span class="text-gray-600 font-medium"> / 60</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button 
+                    onclick="resetSearch()" 
+                    class="w-full mt-8 bg-gradient-to-r from-gray-600 to-gray-700 text-white py-4 px-6 rounded-2xl font-bold hover:from-gray-700 hover:to-gray-800 transition-all duration-300 transform hover:scale-105 animate-in delay-5"
+                >
+                    Cari Nilai Lain
+                </button>
+            </div>
+        </div>
+
+        <!-- Not Found Card -->
+        <div id="notFoundCard" class="max-w-lg mx-auto hidden">
+            <div class="glass-card rounded-3xl p-8 result-enter text-center hover-lift">
+                <div class="text-8xl mb-6 pulse-animation">❌</div>
+                <h2 class="text-3xl font-bold gradient-text mb-4">Data Tidak Ditemukan</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-red-500 to-pink-500 mx-auto rounded-full mb-6"></div>
+                <p class="text-gray-600 mb-8 text-lg leading-relaxed">
+                    NIS yang Anda masukkan tidak ditemukan dalam database. 
+                    Pastikan NIS yang dimasukkan sudah benar.
+                </p>
+                <button 
+                    onclick="resetSearch()" 
+                    class="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-8 rounded-2xl font-bold text-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 shadow-2xl"
+                >
+                    🔄 Coba Lagi
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-16">
+            <div class="bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 inline-block">
+                <p class="text-white/80 text-sm font-medium">
+                    Kelas Informatika | Anthonio Akbar, S.Pd.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data siswa
+        const studentData = [
+            { 
+                nis: "252610002", 
+                nama: "Fara Adzkadina Saraswati", 
+                nilai: 93, 
+                keterangan: "LULUS",
+                skorPG: "19 / 20",
+                essay: [10, 10, 12, 11, 12]
+            },
+            { 
+                nis: "252610003", 
+                nama: "Hana Hanifah", 
+                nilai: 55, 
+                keterangan: "REMED",
+                skorPG: "11 / 20",
+                essay: [4, 11, 5, 6, 7]
+            },
+            { 
+                nis: "252610004", 
+                nama: "Ibrahim Sakti", 
+                nilai: 36, 
+                keterangan: "REMED",
+                skorPG: "8 / 20",
+                essay: [4, 4, 4, 4, 4]
+            },
+            { 
+                nis: "252610005", 
+                nama: "Nabila Marzaqah", 
+                nilai: 85, 
+                keterangan: "LULUS",
+                skorPG: "18 / 20",
+                essay: [11, 10, 10, 8, 10]
+            },
+            { 
+                nis: "252610006", 
+                nama: "Safira Wulandari", 
+                nilai: 54, 
+                keterangan: "REMED",
+                skorPG: "9 / 20",
+                essay: [12, 12, 0, 12, 0]
+            },
+            { 
+                nis: "252610007", 
+                nama: "Syahreza Hakim Firjatullah", 
+                nilai: 86, 
+                keterangan: "LULUS",
+                skorPG: "17 / 20",
+                essay: [11, 11, 10, 10, 10]
+            }
+        ];
+
+        function animateValue(obj, start, end, duration, suffix = '') {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start) + suffix;
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        function searchResult() {
+            const nisInput = document.getElementById('nisInput').value.trim();
+            
+            if (!nisInput) {
+                alert('✨ Silakan masukkan NIS terlebih dahulu');
+                return;
+            }
+
+            // Sembunyikan form pencarian dan tampilkan loading
+            document.getElementById('searchCard').classList.add('hidden');
+            document.getElementById('loadingIndicator').classList.remove('hidden');
+
+            // Cari data siswa (dengan simulasi delay)
+            setTimeout(() => {
+                const student = studentData.find(s => s.nis === nisInput);
+                
+                // Sembunyikan loading
+                document.getElementById('loadingIndicator').classList.add('hidden');
+
+                if (student) {
+                    showResult(student);
+                } else {
+                    showNotFound();
+                }
+            }, 1000); // Delay 1.5 detik untuk efek
+        }
+
+        function showResult(student) {
+            // Sembunyikan card lain
+            document.getElementById('notFoundCard').classList.add('hidden');
+            
+            // Update data hasil
+            document.getElementById('resultNIS').textContent = student.nis;
+            document.getElementById('resultName').textContent = student.nama;
+            
+            // Animasikan nilai
+            animateValue(document.getElementById('resultScore'), 0, student.nilai, 1000);
+            
+            // Update progress bar
+            const progressPercentage = student.nilai;
+            setTimeout(() => {
+                document.getElementById('progressBar').style.width = progressPercentage + '%';
+            }, 200); // Sedikit delay agar transisi terlihat
+            animateValue(document.getElementById('progressText'), 0, Math.round(progressPercentage), 1000, '%');
+            
+            // Update status dan warna
+            const statusElement = document.getElementById('resultStatus');
+            const iconElement = document.getElementById('statusIcon');
+            
+            if (student.keterangan === 'LULUS') {
+                statusElement.textContent = 'LULUS';
+                statusElement.className = 'px-6 py-2 rounded-full font-bold text-sm shadow-lg bg-green-500 text-white';
+                iconElement.textContent = '🏆';
+            } else if (student.keterangan === 'REMED') {
+                statusElement.textContent = 'REMEDIAL';
+                statusElement.className = 'px-6 py-2 rounded-full font-bold text-sm shadow-lg bg-orange-500 text-white';
+                iconElement.textContent = '💪';
+            }
+
+            // Update detail skor
+            document.getElementById('resultPG').textContent = student.skorPG;
+            
+            // Update skor essay
+            const totalEssay = student.essay.reduce((sum, score) => sum + score, 0);
+            animateValue(document.getElementById('totalEssay'), 0, totalEssay, 1000);
+            
+            // Update setiap soal essay dengan animasi
+            for (let i = 0; i < student.essay.length; i++) {
+                const essayElement = document.getElementById(`essay${i + 1}`);
+                const score = student.essay[i];
+                
+                setTimeout(() => {
+                    essayElement.textContent = score;
+                    
+                    // Warna berdasarkan skor
+                    if (score >= 10) {
+                        essayElement.className = 'bg-green-100 text-green-800 rounded-xl py-3 px-2 text-lg font-bold shadow-sm hover-lift border-2 border-green-200';
+                    } else if (score >= 7) {
+                        essayElement.className = 'bg-yellow-100 text-yellow-800 rounded-xl py-3 px-2 text-lg font-bold shadow-sm hover-lift border-2 border-yellow-200';
+                    } else {
+                        essayElement.className = 'bg-red-100 text-red-800 rounded-xl py-3 px-2 text-lg font-bold shadow-sm hover-lift border-2 border-red-200';
+                    }
+                }, 800 + i * 150); // Delay agar muncul setelah animasi utama
+            }
+            
+            // Tampilkan hasil
+            document.getElementById('resultCard').classList.remove('hidden');
+        }
+
+        function showNotFound() {
+            // Sembunyikan card hasil
+            document.getElementById('resultCard').classList.add('hidden');
+            
+            // Tampilkan not found
+            document.getElementById('notFoundCard').classList.remove('hidden');
+        }
+
+        function resetSearch() {
+            // Sembunyikan semua card hasil
+            document.getElementById('resultCard').classList.add('hidden');
+            document.getElementById('notFoundCard').classList.add('hidden');
+            
+            // Tampilkan kembali form pencarian
+            document.getElementById('searchCard').classList.remove('hidden');
+
+            // Reset input
+            document.getElementById('nisInput').value = '';
+            document.getElementById('nisInput').focus();
+        }
+
+        // Event listener untuk Enter key
+        document.getElementById('nisInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchResult();
+            }
+        });
+
+        // Focus pada input saat halaman dimuat
+        window.onload = function() {
+            document.getElementById('nisInput').focus();
+        };
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97b49f0f53be4112',t:'MTc1NzIzMTQ5MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
